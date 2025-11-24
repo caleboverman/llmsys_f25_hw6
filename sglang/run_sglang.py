@@ -24,7 +24,12 @@ def main():
     # TODO: initialize sglang egnine here
     # you may want to explore different args we can pass here to make the inference faster
     # e.g. dp_size, mem_fraction_static
-    llm = None
+    llm = sgl.Runtime(
+        model_path=model_path,
+        tokenizer_path=model_path,
+        trust_remote_code=True,
+        mem_fraction_static=0.85,
+    )
 
     prompts = []
 
@@ -36,13 +41,32 @@ def main():
     outputs = []
 
     # TODO: you may want to explore different batch_size
-    batch_size = len(prompts) 
+    batch_size = min(8, len(prompts)) 
 
     from tqdm import tqdm
     for i in tqdm(range(0, len(prompts), batch_size)):
         # TODO: prepare the batched prompts and use llm.generate
         # save the output in outputs
-        pass
+        if i == 0:
+            @sgl.function
+            def alpaca_eval_program(s, prompt: str):
+                s += prompt
+                s += sgl.gen(
+                    "output",
+                    max_new_tokens=sampling_params["max_new_tokens"],
+                )
+                return {"output": s["output"]}
+
+        batch_prompts = prompts[i:i + batch_size]
+        payload = [{"prompt": prompt} for prompt in batch_prompts]
+        batch_outputs = llm.generate(
+            alpaca_eval_program,
+            payload,
+            temperature=sampling_params["temperature"],
+            top_p=sampling_params["top_p"],
+            max_new_tokens=sampling_params["max_new_tokens"],
+        )
+        outputs.extend([sample["output"] for sample in batch_outputs])
 
     with open(args.output_file, "w") as f:
         for i in range(0, len(outputs), 10):
