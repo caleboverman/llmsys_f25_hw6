@@ -32,7 +32,8 @@ def main():
         model_path=model_path,
         tokenizer_path=model_path,
         trust_remote_code=True,
-        mem_fraction_static=0.85,
+        mem_fraction_static=0.7,
+        cuda_graph_max_bs=16,
         attention_backend="dual_chunk_flash_attn",
     )
 
