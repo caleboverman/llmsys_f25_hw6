@@ -60,6 +60,8 @@ def main():
                 s += sgl.gen(
                     "output",
                     max_new_tokens=sampling_params["max_new_tokens"],
+                    temperature=sampling_params["temperature"],
+                    top_p=sampling_params["top_p"],
                 )
                 return {"output": s["output"]}
 
@@ -68,9 +70,6 @@ def main():
         batch_outputs = llm.generate(
             alpaca_eval_program,
             payload,
-            temperature=sampling_params["temperature"],
-            top_p=sampling_params["top_p"],
-            max_new_tokens=sampling_params["max_new_tokens"],
         )
         outputs.extend([sample["output"] for sample in batch_outputs])
 
