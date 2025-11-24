@@ -42,12 +42,12 @@ def main():
     for i in dataset:
         prompts.append(i['instruction'])
 
-    sampling_params = {"temperature": 0.7, "top_p": 0.95, "max_new_tokens": 8192}
+    sampling_params = {"temperature": 0.7, "top_p": 0.95, "max_new_tokens": 1024}
 
     outputs = []
 
     # TODO: you may want to explore different batch_size
-    batch_size = min(8, len(prompts)) 
+    batch_size = min(32, len(prompts))
 
     from tqdm import tqdm
     for i in tqdm(range(0, len(prompts), batch_size)):
