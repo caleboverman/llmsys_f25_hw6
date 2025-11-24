@@ -18,7 +18,11 @@ def main():
     )
     args = parser.parse_args()
 
-    dataset = load_dataset("tatsu-lab/alpaca_eval", data_files="alpaca_eval.json", split="eval", trust_remote_code=True)
+    dataset = load_dataset(
+        "json",
+        data_files="alpaca_eval.json",
+        split="train",
+    )
     model_path = args.model_path
 
     # TODO: initialize sglang egnine here
