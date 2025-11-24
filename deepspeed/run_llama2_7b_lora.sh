@@ -26,6 +26,10 @@ deepspeed main.py \
    --gradient_checkpointing \
    --dtype bf16 \
    --zero_stage $ZERO_STAGE \
+   --lora_dim 64 \
+   --lora_module_name "model.layers." \
+   --only_optimize_lora \
+   --lora_learning_rate 3e-4 \
    --deepspeed \
    --output_dir $OUTPUT \
    #&> $OUTPUT/training.log
