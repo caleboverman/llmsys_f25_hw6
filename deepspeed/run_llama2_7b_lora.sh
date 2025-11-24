@@ -17,7 +17,7 @@ deepspeed main.py \
    --model_name_or_path meta-llama/Llama-2-7b-hf \
    --per_device_train_batch_size 1 \
    --per_device_eval_batch_size 4 \
-   --max_seq_len 512 \
+   --max_seq_len 256 \
    --learning_rate 9.65e-6 \
    --weight_decay 0. \
    --num_train_epochs 2  \
@@ -28,7 +28,7 @@ deepspeed main.py \
    --gradient_checkpointing \
    --dtype bf16 \
    --zero_stage $ZERO_STAGE \
-   --lora_dim 32 \
+   --lora_dim 16 \
    --lora_module_name "model.layers." \
    --only_optimize_lora \
    --lora_learning_rate 3e-4 \
