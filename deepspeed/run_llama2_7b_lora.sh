@@ -4,10 +4,12 @@
 
 # DeepSpeed Team
 ZERO_STAGE=$1
-OUTPUT=./output_llama2_7b_lora
-if [ "$ZERO_STAGE" == "" ]; then
+if [[ "$ZERO_STAGE" =~ ^[0-9]+$ ]]; then
+    shift
+else
     ZERO_STAGE=3
 fi
+OUTPUT=./output_llama2_7b_lora
 mkdir -p $OUTPUT
 
 deepspeed main.py \
@@ -32,4 +34,5 @@ deepspeed main.py \
    --lora_learning_rate 3e-4 \
    --deepspeed \
    --output_dir $OUTPUT \
+   "$@" \
    #&> $OUTPUT/training.log
