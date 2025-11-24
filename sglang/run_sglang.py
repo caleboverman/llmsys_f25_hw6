@@ -33,7 +33,6 @@ def main():
         tokenizer_path=model_path,
         trust_remote_code=True,
         mem_fraction_static=0.7,
-        max_batch_size=16,
     )
 
     prompts = []
