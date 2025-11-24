@@ -54,14 +54,12 @@ def main():
         # TODO: prepare the batched prompts and use llm.generate
         # save the output in outputs
         batch_prompts = prompts[i:i + batch_size]
-        sampling = sgl.SamplingParams(
-            temperature=sampling_params["temperature"],
-            top_p=sampling_params["top_p"],
-            max_new_tokens=sampling_params["max_new_tokens"],
+        batch_outputs = llm.generate(
+            batch_prompts,
+            sampling_params=sampling_params,
         )
-        batch_outputs = llm.generate(batch_prompts, sampling)
         # Extract the generated text from the output objects
-        outputs.extend([out.text for out in batch_outputs])
+        outputs.extend([out["text"] for out in batch_outputs])
 
     with open(args.output_file, "w") as f:
         for i in range(0, len(outputs), 10):
